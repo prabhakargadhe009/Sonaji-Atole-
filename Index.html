@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>स्वामी फायबर डोअर आणि स्लाइडिंग विंडो | जालन्यातील प्रीमियम दरवाजे</title>
+    <meta name="description" content="स्टायलिश, मजबूत आणि वॉटरप्रूफ दरवाजांसह तुमचे स्वप्नातील घर सजवा. सोनाजी आटोळे, जालना यांच्याकडून प्रीमियम फायबर डोअर्स आणि स्लाइडिंग विंडोज.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons for Premium Look) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* --- Variables & Reset --- */
+        :root {
+            /* New Purple Theme based on the provided image */
+            --bg-dark: #1b143a; 
+            --accent: #8b5cf6; 
+            --accent-hover: #7c3aed;
+            --white: #FFFFFF;
+            --gray: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(139, 92, 246, 0.3);
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- Loader --- */
+        .loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--bg-dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader-ring {
+            width: 60px; height: 60px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- Typography --- */
+        h1, h2, h3 { font-family: var(--font-heading); font-weight: 700; }
+        h1 span { color: var(--accent); }
+        p { color: var(--gray); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- Glassmorphism Utilities --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-card:hover { border-color: rgba(139, 92, 246, 0.6); }
+
+        /* --- Buttons --- */
+        .btn-primary, .btn-outline, .btn-whatsapp {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: var(--font-body);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: var(--white);
+            border: none;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.6); }
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        .btn-outline:hover { background: var(--accent); color: var(--white); }
+        .btn-whatsapp {
+            background: #25D366; color: white; border: none; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-whatsapp:hover { background: #1ebe57; transform: translateY(-3px); }
+
+        /* --- Navigation --- */
+        .glass-nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1200px;
+            background: rgba(27, 20, 58, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 30px; z-index: 1000;
+        }
+        .glass-nav .logo h2 { font-size: 24px; color: var(--white); }
+        .glass-nav .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 20px; list-style: none; }
+        .nav-links a { color: var(--white); text-decoration: none; font-size: 15px; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; padding-top: 100px;
+        }
+        .hero-bg-animated {
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            animation: pulse 10s infinite alternate; z-index: -1;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.2); } }
+        .hero-content {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+        }
+        .trust-badge { display: inline-block; padding: 8px 16px; border-radius: 30px; font-size: 14px; margin-bottom: 20px; background: rgba(139,92,246,0.1); border-color: var(--accent); }
+        .stars { color: #FFD700; }
+        .hero-text h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 20px; }
+        .hero-text p { font-size: 1.1rem; margin-bottom: 30px; }
+        .hero-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+
+        /* Responsive Image Styling */
+        .hero-image-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .responsive-hero-img {
+            width: 100%;
+            height: auto;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        /* --- Features Section --- */
+        .features-section { padding: 100px 20px; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .accent-icon { font-size: 3rem; color: var(--accent); margin-bottom: 15px; }
+        .feature-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+
+        /* --- Products Section --- */
+        .products-section { padding: 100px 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .product-card { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        
+        /* Updated Product Image Styling */
+        .product-img { 
+            width: 100%; 
+            height: 250px; 
+            object-fit: cover;
+            background: rgba(0,0,0,0.3); 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .price-badge { font-size: 0.9rem; color: var(--white); background: var(--accent); padding: 5px 12px; border-radius: 8px; }
+
+        /* --- Booking Form --- */
+        .booking-section { padding: 100px 20px; display: flex; justify-content: center; }
+        .booking-glass { max-width: 600px; width: 100%; text-align: center; }
+        .booking-glass h2 { margin-bottom: 15px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        input, select {
+            width: 100%; padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--white);
+            border-radius: 12px;
+            font-family: var(--font-body);
+            outline: none; transition: border 0.3s;
+        }
+        input::placeholder { color: #a0aec0; }
+        select option { background: var(--bg-dark); color: var(--white); }
+        input:focus, select:focus { border-color: var(--accent); }
+        .w-100 { width: 100%; }
+
+        /* --- Contact & Footer --- */
+        .contact-section { padding: 50px 20px 100px; }
+        .contact-card { text-align: center; max-width: 600px; margin: 0 auto; }
+        .contact-info p { margin: 15px 0; font-size: 1.1rem; color: var(--white); }
+        .contact-info i { color: var(--accent); margin-right: 10px; }
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--glass-border); }
+
+        /* --- Floating Action Buttons (FAB) --- */
+        .fab {
+            position: fixed; bottom: 30px;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000; transition: transform 0.3s;
+        }
+        .fab-wa { right: 30px; background: #25D366; }
+        .fab-call { right: 100px; background: var(--accent); }
+        .fab:hover { transform: scale(1.1); }
+
+        /* --- Animations --- */
+        .hidden-element {
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .show-element { opacity: 1; transform: translateY(0); }
+
+        /* --- Responsive (Desktop, Tablet, iPad, Smartphone) --- */
+        @media (max-width: 992px) {
+            .hero-text h1 { font-size: 2.5rem; }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; margin-top: 50px; gap: 30px; }
+            .hero-buttons { justify-content: center; }
+            .nav-links, .nav-actions { display: none; }
+            .hero { padding-top: 120px; }
+            .responsive-hero-img { max-height: 350px; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-text h1 { font-size: 2rem; }
+            .glass-nav { padding: 10px 20px; width: 95%; }
+            .fab { width: 50px; height: 50px; font-size: 24px; }
+            .fab-call { right: 90px; }
+            .responsive-hero-img { max-height: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loader" class="loader">
+        <div class="loader-ring"></div>
+        <h2>स्वामी डोअर्स</h2>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <nav id="navbar" class="glass-nav">
+        <div class="logo">
+            <h2>स्वामी <span>डोअर्स</span></h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">मुख्यपृष्ठ</a></li>
+            <li><a href="#features">वैशिष्ट्ये</a></li>
+            <li><a href="#products">उत्पादने</a></li>
+            <li><a href="#booking">बुकिंग करा</a></li>
+            <li><a href="#contact">संपर्क</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="tel:+917276230733" class="btn-outline"><i class="ph ph-phone"></i> कॉल करा</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-bg-animated"></div>
+        <div class="container hero-content">
+            <div class="hero-text hidden-element">
+                <div class="trust-badge glass-card">
+                    <span class="stars">★★★★★</span> ५००+ समाधानी ग्राहक
+                </div>
+                <h1>प्रीमियम <span>फायबर डोअर्स</span> <br>आणि स्लाइडिंग विंडोज</h1>
+                <p>स्टायलिश, मजबूत आणि वॉटरप्रूफ दरवाजांसह तुमचे स्वप्नातील घर सजवा. होलसेल दरात उत्कृष्ट गुणवत्ता.</p>
+                <div class="hero-buttons">
+                    <a href="#booking" class="btn-primary">मोफत कोटेशन मिळवा</a>
+                    <a href="https://wa.me/917276230733?text=नमस्कार,%20मला%20फायबर%20डोअर%20बुक%20करायचे%20आहे." target="_blank" class="btn-whatsapp"><i class="ph ph-whatsapp-logo"></i> व्हॉट्सॲप</a>
+                </div>
+            </div>
+            
+            <div class="hero-image-wrapper hidden-element tilt-element">
+                <!-- Random Hero Image showcasing a modern door interior -->
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000&auto=format&fit=crop" alt="Premium Modern Door" class="responsive-hero-img" fetchpriority="high">
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section container">
+        <div class="section-header hidden-element">
+            <h2>आमचे दरवाजे का निवडावे?</h2>
+            <p>दीर्घायुष्यासाठी बनवलेले. सुंदरतेसाठी डिझाइन केलेले.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card glass-card hidden-element tilt-element">
+                <i class="ph ph-shield-check accent-icon"></i>
+                <h3>मजबूत आणि टिकाऊ</h3>
+                <p>जास्तीत जास्त सुरक्षिततेची हमी देणारे उच्च दर्जाचे मटेरियल.</p>
+            </div>
+            <div class="feature-card glass-card hidden-element tilt-element">
+                <i class="ph ph-drop accent-icon"></i>
+                <h3>वॉटरप्रूफ</h3>
+                <p>पाणी आणि ओलाव्यापासून १००% सुरक्षित.</p>
+            </div>
+            <div class="feature-card glass-card hidden-element tilt-element">
+                <i class="ph ph-bug accent-icon"></i>
+                <h3>वाळवी प्रतिबंधक</h3>
+                <p>वाळवी दूर ठेवण्यासाठी प्रगत रासायनिक प्रक्रिया (Chemical Treatment).</p>
+            </div>
+            <div class="feature-card glass-card hidden-element tilt-element">
+                <i class="ph ph-wrench accent-icon"></i>
+                <h3>कमी देखभाल (Low Maintenance)</h3>
+                <p>स्वच्छ करण्यास सोपे आणि स्क्रॅच-रेझिस्टंट पृष्ठभाग.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section container">
+        <div class="section-header hidden-element">
+            <h2>आमची प्रीमियम श्रेणी</h2>
+        </div>
+        <div class="product-grid">
+            <div class="product-card glass-card tilt-element">
+                <!-- Added external random image link for Fiber Door -->
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=500&auto=format&fit=crop" alt="Fiber Door" class="product-img">
+                <h3>फायबर दरवाजे</h3>
+                <span class="price-badge">उत्कृष्ट गुणवत्ता</span>
+                <br>
+                <a href="#booking" class="btn-outline">आता बुक करा</a>
+            </div>
+            <div class="product-card glass-card tilt-element">
+                <!-- Added external random image link for Sliding Window -->
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=500&auto=format&fit=crop" alt="Sliding Windows" class="product-img">
+                <h3>स्लाइडिंग विंडोज</h3>
+                <span class="price-badge">स्मूथ ऑपरेशन</span>
+                <br>
+                <a href="#booking" class="btn-outline">आता बुक करा</a>
+            </div>
+            <div class="product-card glass-card tilt-element">
+                <!-- Added external random image link for Designer Door -->
+                <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=500&auto=format&fit=crop" alt="Designer Main Door" class="product-img">
+                <h3>डिझायनर मुख्य दरवाजे</h3>
+                <span class="price-badge">लक्झरी फिनिश</span>
+                <br>
+                <a href="#booking" class="btn-outline">आता बुक करा</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking / WhatsApp API Form -->
+    <section id="booking" class="booking-section container">
+        <div class="booking-glass glass-card hidden-element">
+            <h2>मोफत मोजमाप (Measurement) बुक करा</h2>
+            <p>खालील फॉर्म भरा आणि तुमचे तपशील आमच्या टीमला त्वरित व्हॉट्सॲपवर पाठवा.</p>
+            
+            <form id="whatsappForm">
+                <div class="form-group">
+                    <input type="text" id="custName" placeholder="तुमचे पूर्ण नाव" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="custPhone" placeholder="फोन नंबर" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="custCity" placeholder="शहर (उदा. जालना)" required>
+                </div>
+                <div class="form-group">
+                    <select id="doorType" required>
+                        <option value="" disabled selected>दरवाजा / खिडकीचा प्रकार निवडा</option>
+                        <option value="फायबर डोअर (Fiber Door)">फायबर डोअर</option>
+                        <option value="स्लाइडिंग विंडो (Sliding Window)">स्लाइडिंग विंडो</option>
+                        <option value="UPVC विंडो (UPVC Window)">UPVC विंडो</option>
+                        <option value="डिझायनर डोअर (Designer Door)">डिझायनर डोअर</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-100"><i class="ph ph-whatsapp-logo"></i> व्हॉट्सॲपवर बुकिंग पाठवा</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section container hidden-element">
+        <div class="contact-card glass-card">
+            <h2>संपर्क साधा</h2>
+            <div class="contact-info">
+                <p><i class="ph ph-user"></i> <strong>मालक:</strong> सोनाजी आटोळे</p>
+                <p><i class="ph ph-phone"></i> <strong>फोन:</strong> +91 7276230733</p>
+                <p><i class="ph ph-map-pin"></i> <strong>पत्ता:</strong> मंठा चौफुली, जालना, महाराष्ट्र</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Action Buttons -->
+    <a href="tel:+917276230733" class="fab fab-call"><i class="ph ph-phone"></i></a>
+    <a href="https://wa.me/917276230733?text=नमस्कार,%20मला%20फायबर%20डोअर%20बुक%20करायचे%20आहे." target="_blank" class="fab fab-wa"><i class="ph ph-whatsapp-logo"></i></a>
+
+    <footer>
+        <p>&copy; २०२६ स्वामी फायबर डोअर आणि स्लाइडिंग विंडो. सर्व हक्क राखीव.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // --- 1. Loading Screen Removal ---
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }, 1000); // Fast loading effect
+
+            // --- 2. Scroll Animation (Intersection Observer) ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show-element');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            const hiddenElements = document.querySelectorAll('.hidden-element');
+            hiddenElements.forEach((el) => observer.observe(el));
+
+            // --- 3. 3D Tilt Effect on Cards (Desktop Only) ---
+            if(window.innerWidth > 992) {
+                const tiltElements = document.querySelectorAll('.tilt-element');
+                
+                tiltElements.forEach(element => {
+                    element.addEventListener('mousemove', (e) => {
+                        const rect = element.getBoundingClientRect();
+                        const x = e.clientX - rect.left; 
+                        const y = e.clientY - rect.top;  
+                        
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        
+                        const rotateX = ((y - centerY) / centerY) * -10; 
+                        const rotateY = ((x - centerX) / centerX) * 10;
+
+                        element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    });
+
+                    element.addEventListener('mouseleave', () => {
+                        element.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                        element.style.transition = "transform 0.5s ease"; 
+                    });
+
+                    element.addEventListener('mouseenter', () => {
+                        element.style.transition = "none"; 
+                    });
+                });
+            }
+
+            // --- 4. Custom WhatsApp API Integration (Booking Form) ---
+            const whatsappForm = document.getElementById('whatsappForm');
+            
+            whatsappForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('custName').value;
+                const phone = document.getElementById('custPhone').value;
+                const city = document.getElementById('custCity').value;
+                const doorType = document.getElementById('doorType').value;
+                
+                const ownerPhone = "917276230733";
+                const message = `*नवीन बुकिंग विनंती*%0A%0A*नाव:* ${name}%0A*फोन:* ${phone}%0A*शहर:* ${city}%0A*उत्पादन:* ${doorType}%0A%0Aकृपया मोफत साईट व्हिजिट आणि मोजमापासाठी माझ्याशी संपर्क साधा.`;
+                
+                const waURL = `https://wa.me/${ownerPhone}?text=${message}`;
+                
+                window.open(waURL, '_blank');
+                whatsappForm.reset();
+            });
+
+            // --- 5. Navbar Sticky Blur effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if(window.scrollY > 50) {
+                    navbar.style.background = 'rgba(27, 20, 58, 0.9)';
+                    navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+                } else {
+                    navbar.style.background = 'rgba(27, 20, 58, 0.7)';
+                    navbar.style.boxShadow = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
